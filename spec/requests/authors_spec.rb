@@ -17,21 +17,12 @@ RSpec.describe "/authors", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Author. As you add validations to Author, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let!(:author) {create(:author)}
+  let!(:author_attributes) {attributes_for(:author)}
 
   describe "GET /index" do
     context "when the author exists"  do
-      let!(:author) {create(:author)}
-      let!(:author_attributes) {attributes_for(:author)}
-
       before do
-        #author = create(:author)
         get "/authors/"
       end
 
@@ -40,108 +31,114 @@ RSpec.describe "/authors", type: :request do
       end
 
       it "renders authors name" do
-        p author
         expect(response.body).to include(author.name)
       end
-
     end
-
-
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      author = Author.create! valid_attributes
-      get author_url(author)
-      expect(response).to be_successful
+    context "when the author exists"  do
+      before do
+        get "/authors/", params: {id:author.id}
+      end
+
+      it "renders a successful response" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "renders authors name" do
+        expect(response.body).to include(author.name)
+      end
+    end
+
+    context "when the author doesn't exists" do
+      let!(:author_error) {build(:author)}
+      before do
+        get "/authors/", params: {id:author_error.id}
+      end
+
+      it "not renders authors name" do
+        expect(response.body).to_not include(author_error.name)
+      end
     end
   end
 
   describe "GET /new" do
     it "renders a successful response" do
-      get new_author_url
+      get "/authors/new"
       expect(response).to be_successful
     end
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      author = Author.create! valid_attributes
-      get edit_author_url(author)
-      expect(response).to be_successful
+    context "when the author exists"  do
+      before do
+        get "/authors/#{author.id}/edit"
+      end
+
+      it "renders a successful response" do
+        expect(response).to be_successful
+      end
+
+      it "renders authors name" do
+        expect(response.body).to include(author.name)
+      end
     end
   end
 
   describe "POST /create" do
     context "with valid parameters" do
+      before do
+        post "/authors/", params: { author: author_attributes }
+      end
+
       it "creates a new Author" do
-        expect {
-          post authors_url, params: { author: valid_attributes }
-        }.to change(Author, :count).by(1)
+        expect(response).to have_http_status(:redirect)
       end
 
       it "redirects to the created author" do
-        post authors_url, params: { author: valid_attributes }
-        expect(response).to redirect_to(author_url(Author.last))
-      end
-    end
-
-    context "with invalid parameters" do
-      it "does not create a new Author" do
-        expect {
-          post authors_url, params: { author: invalid_attributes }
-        }.to change(Author, :count).by(0)
-      end
-
-      it "renders a successful response (i.e. to display the 'new' template)" do
-        post authors_url, params: { author: invalid_attributes }
-        expect(response).to be_successful
+        get "/authors", params: { id: author.id }
+        expect(response.body).to include("Author was successfully created.")
       end
     end
   end
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested author" do
-        author = Author.create! valid_attributes
-        patch author_url(author), params: { author: new_attributes }
-        author.reload
-        skip("Add assertions for updated state")
+      before do
+        patch "/authors/#{author.id}", params: { author: author_attributes }
       end
 
       it "redirects to the author" do
-        author = Author.create! valid_attributes
-        patch author_url(author), params: { author: new_attributes }
-        author.reload
-        expect(response).to redirect_to(author_url(author))
+        expect(response).to have_http_status(:redirect)
       end
-    end
 
-    context "with invalid parameters" do
-      it "renders a successful response (i.e. to display the 'edit' template)" do
-        author = Author.create! valid_attributes
-        patch author_url(author), params: { author: invalid_attributes }
-        expect(response).to be_successful
+      it "redirects to the update author" do
+        get "/authors", params: { id: author.id }
+        expect(response.body).to include("Author was successfully updated.")
+      end
+
+      it "redirects to the update author name" do
+        get "/authors/#{author.id}"
+        expect(response.body).to include(author.reload.name.to_s)
       end
     end
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested author" do
-      author = Author.create! valid_attributes
-      expect {
-        delete author_url(author)
-      }.to change(Author, :count).by(-1)
-    end
+    context "with valid parameters" do
+      before do
+        delete "/authors/#{author.id}"
+      end
 
-    it "redirects to the authors list" do
-      author = Author.create! valid_attributes
-      delete author_url(author)
-      expect(response).to redirect_to(authors_url)
+      it "destroys the requested author" do
+        expect(response).to have_http_status(:redirect)
+      end
+
+      it "redirects to the delete author" do
+        get "/authors", params: { id: author.id }
+        expect(response.body).to include("Author was successfully destroyed.")
+      end
     end
   end
 end

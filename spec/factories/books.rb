@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :book do
-    titulo { "MyString" }
-    published_at { "2022-08-17 12:05:53" }
-    author { nil }
+    titulo { FFaker::Lorem.word }
+    published_at { FFaker::Time.datetime }
+    author { build(:author) }
   end
 end

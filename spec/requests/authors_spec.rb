@@ -26,11 +26,27 @@ RSpec.describe "/authors", type: :request do
   }
 
   describe "GET /index" do
-    it "renders a successful response" do
-      Author.create! valid_attributes
-      get authors_url
-      expect(response).to be_successful
+    context "when the author exists"  do
+      let!(:author) {create(:author)}
+      let!(:author_attributes) {attributes_for(:author)}
+
+      before do
+        #author = create(:author)
+        get "/authors/"
+      end
+
+      it "renders a successful response" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "renders authors name" do
+        p author
+        expect(response.body).to include(author.name)
+      end
+
     end
+
+
   end
 
   describe "GET /show" do

@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Author, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'valid author' do
+    author = build(:author)
+    expect(author).to be_valid
+  end
 end

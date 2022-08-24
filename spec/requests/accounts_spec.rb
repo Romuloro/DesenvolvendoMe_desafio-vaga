@@ -17,69 +17,98 @@ RSpec.describe "/accounts", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Account. As you add validations to Account, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let!(:account) {create(:account)}
+  let!(:account_attributes) {attributes_for(:account)}
 
   describe "GET /index" do
-    it "renders a successful response" do
-      Account.create! valid_attributes
-      get accounts_url
-      expect(response).to be_successful
+    context "when the account exists"  do
+      before do
+        get "/accounts/"
+      end
+
+      it "renders a successful response" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "renders accounts number" do
+        expect(response.body).to include(account.account_number)
+      end
+
+      it "renders account supplier name" do
+        expect(response.body).to include(account.supplier.name.to_s)
+      end
     end
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      account = Account.create! valid_attributes
-      get account_url(account)
-      expect(response).to be_successful
+    context "when the account exists"  do
+      before do
+        get "/accounts/", params: {id:account.id}
+      end
+
+      it "renders a successful response" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "renders accounts number" do
+        expect(response.body).to include(account.account_number)
+      end
+
+      it "renders account supplier name" do
+        expect(response.body).to include(account.supplier.name.to_s)
+      end
+    end
+
+    context "when the account doesn't exists" do
+      let!(:account_error) {build(:account)}
+      before do
+        get "/accounts/", params: {id:account_error.id}
+      end
+
+      it "not renders account number" do
+        expect(response.body).to_not include(account_error.account_number)
+      end
     end
   end
 
   describe "GET /new" do
     it "renders a successful response" do
-      get new_account_url
+      get "/accounts/new"
       expect(response).to be_successful
     end
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      account = Account.create! valid_attributes
-      get edit_account_url(account)
-      expect(response).to be_successful
+    context "when the accounts exists"  do
+      before do
+        get "/accounts/#{account.id}/edit"
+      end
+
+      it "renders a successful response" do
+        expect(response).to be_successful
+      end
+
+      it "renders account supplier name" do
+        expect(response.body).to include(account.supplier.name)
+      end
     end
   end
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new Account" do
-        expect {
-          post accounts_url, params: { account: valid_attributes }
-        }.to change(Account, :count).by(1)
+      before do
+        account_ = build(:account)
+        post "/accounts/", params: { account: account_ }
       end
 
-      it "redirects to the created account" do
-        post accounts_url, params: { account: valid_attributes }
-        expect(response).to redirect_to(account_url(Account.last))
-      end
-    end
-
-    context "with invalid parameters" do
-      it "does not create a new Account" do
-        expect {
-          post accounts_url, params: { account: invalid_attributes }
-        }.to change(Account, :count).by(0)
+      it "creates a new accounts" do
+        puts response.body
+        expect(response).to have_http_status(:redirect)
       end
 
-      it "renders a successful response (i.e. to display the 'new' template)" do
-        post accounts_url, params: { account: invalid_attributes }
-        expect(response).to be_successful
+      it "redirects to the created accounts" do
+        get "/accounts", params: { id: account.id }
+        expect(response.body).to include("Account was successfully created.")
       end
     end
   end

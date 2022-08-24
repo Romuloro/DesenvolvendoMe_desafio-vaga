@@ -58,7 +58,9 @@ RSpec.describe "/suppliers", type: :request do
       end
 
       it "not renders supplier name" do
+        puts response.body
         expect(response.body).to_not include(supplier_error.name)
+        #expect(response).to have_http_status(:success)
       end
     end
   end

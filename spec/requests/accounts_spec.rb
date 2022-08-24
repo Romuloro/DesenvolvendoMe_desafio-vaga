@@ -98,7 +98,7 @@ RSpec.describe "/accounts", type: :request do
     context "with valid parameters" do
       before do
         account_ = build(:account)
-        post "/accounts/", params: { account: account_ }
+        post "/accounts/", params: { account: { account_number: account_.account_number, supplier_id: account.supplier.id } }
       end
 
       it "creates a new accounts" do
@@ -115,46 +115,45 @@ RSpec.describe "/accounts", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested account" do
-        account = Account.create! valid_attributes
-        patch account_url(account), params: { account: new_attributes }
-        account.reload
-        skip("Add assertions for updated state")
+      before do
+        patch "/accounts/#{account.id}", params: { account: account_attributes }
       end
 
-      it "redirects to the account" do
-        account = Account.create! valid_attributes
-        patch account_url(account), params: { account: new_attributes }
-        account.reload
-        expect(response).to redirect_to(account_url(account))
+      it "redirects to the book" do
+        expect(response).to have_http_status(:redirect)
       end
-    end
 
-    context "with invalid parameters" do
-      it "renders a successful response (i.e. to display the 'edit' template)" do
-        account = Account.create! valid_attributes
-        patch account_url(account), params: { account: invalid_attributes }
-        expect(response).to be_successful
+      it "redirects to the update book" do
+        get "/accounts", params: { id: account.id }
+        expect(response.body).to include("Account was successfully updated.")
+      end
+
+      it "redirects to the update accounts account number" do
+        get "/accounts/#{account.id}"
+        expect(response.body).to include(account.reload.account_number.to_s)
+      end
+
+      it "redirects to the update accounts supplier name" do
+        get "/accounts/#{account.id}"
+        expect(response.body).to include(account.reload.supplier.name.to_s)
       end
     end
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested account" do
-      account = Account.create! valid_attributes
-      expect {
-        delete account_url(account)
-      }.to change(Account, :count).by(-1)
-    end
+    context "with valid parameters" do
+      before do
+        delete "/accounts/#{account.id}"
+      end
 
-    it "redirects to the accounts list" do
-      account = Account.create! valid_attributes
-      delete account_url(account)
-      expect(response).to redirect_to(accounts_url)
+      it "destroys the requested author" do
+        expect(response).to have_http_status(:redirect)
+      end
+
+      it "redirects to the delete author" do
+        get "/accounts", params: { id: account.id }
+        expect(response.body).to include("Account was successfully destroyed.")
+      end
     end
   end
 end

@@ -1,0 +1,27 @@
+<%= form_with(model: account) do |form| %>
+  <% if account.errors.any? %>
+    <div style="color: red" xmlns:account_number="http://www.w3.org/1999/xhtml">
+      <h2><%= pluralize(account.errors.count, "error") %> prohibited this account from being saved:</h2>
+
+      <ul>
+        <% account.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :account_number, style: "display: block" %>
+    <%= form.text_field( name = :account_number, value = {account_number: @account.random_account_number}) %>
+  </div>
+
+  <div>
+    <%= form.label :supplier_id, style: "display: block" %>
+    <%= select(:account, :supplier_id  , Supplier.all.collect { |p| [ p.name, p.id ] }, { include_blank: true })%>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

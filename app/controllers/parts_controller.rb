@@ -65,6 +65,6 @@ class PartsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def part_params
-      params.require(:part).permit(:descricao, :part_number, :supplier_id)
+      params.require(:part).permit(:name, :descricao, :part_number, :supplier_id)
     end
 end

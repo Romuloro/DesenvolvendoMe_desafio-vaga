@@ -1,0 +1,37 @@
+<%= form_with(model: part) do |form| %>
+  <% if part.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(part.errors.count, "error") %> prohibited this part from being saved:</h2>
+
+      <ul>
+        <% part.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :descricao, style: "display: block" %>
+    <%= form.text_field :descricao %>
+  </div>
+
+  <div>
+    <%= form.label :part_number, style: "display: block" %>
+    <%= form.text_field( name = :part_number, value = { part_number: @part.random_part_number }) %>
+  </div>
+
+  <div>
+    <%= form.label :supplier_id, style: "display: block" %>
+    <%= select(:part, :supplier_id  , Supplier.all.collect { |p| [ p.name, p.id ] }, { include_blank: true })%>
+  </div>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -5,6 +5,10 @@ class Account < ApplicationRecord
   validates_uniqueness_of :account_number
 
   def random_account_number
-    self.account_number = SecureRandom.hex
+    if self.account_number == nil
+      return self.account_number = SecureRandom.hex
+    else
+      return self.account_number
+    end
   end
 end

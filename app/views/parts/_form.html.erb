@@ -18,7 +18,7 @@
 
   <div>
     <%= form.label :part_number, style: "display: block" %>
-    <%= form.text_field :part_number %>
+    <%= form.text_field( name = :part_number, value = { part_number: @part.random_part_number }) %>
   </div>
 
   <div>

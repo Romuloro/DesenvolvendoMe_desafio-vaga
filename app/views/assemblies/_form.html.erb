@@ -17,6 +17,13 @@
   </div>
 
   <div>
+    <%= form.label :part, style: "display: block" %>
+    <div style = "display:flex; flex-direction: column">
+      <%= collection_check_boxes(:assembly, :parts, Part.all, :id, :name, include_hidden: false ) %>
+    </div>
+  </div>
+
+  <div>
     <%= form.submit %>
   </div>
 <% end %>

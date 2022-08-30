@@ -4,4 +4,13 @@
     <%= assembly.name %>
   </p>
 
+  <div>
+    <strong>Parts:</strong>
+    <% assembly.parts.each do |part| %>
+      <%= link_to part, style:"text-decoration:none" do %>
+        <p> <%= part.name %></p>
+      <% end %>
+    <% end %>
+  </div>
+
 </div>

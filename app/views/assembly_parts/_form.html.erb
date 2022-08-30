@@ -13,12 +13,14 @@
 
   <div>
     <%= form.label :assembly_id, style: "display: block" %>
-    <%= form.text_field :assembly_id %>
+    <%= select(:assembly_part, :assembly_id  , Assembly.all.collect { |p| [ p.name, p.id ] }, { include_blank: true })%>
   </div>
 
   <div>
     <%= form.label :part_id, style: "display: block" %>
-    <%= form.text_field :part_id %>
+    <div style = "display:flex; flex-direction: column">
+      <%= collection_check_boxes(:assembly_part, :part_id, Part.all, :id, :name, include_hidden: false ) %>
+    </div>
   </div>
 
   <div>

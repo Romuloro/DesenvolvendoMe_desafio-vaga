@@ -2,8 +2,10 @@ require 'securerandom'
 
 class Part < ApplicationRecord
   belongs_to :supplier
-  has_and_belongs_to_many :assemblies
+  has_many :assembly_parts, dependent: :destroy
+  has_many :assemblies, through: :assembly_parts
   validates_uniqueness_of :part_number
+
 
   def random_part_number
     if self.part_number == nil

@@ -1,3 +1,4 @@
 class Assembly < ApplicationRecord
-  has_and_belongs_to_many :parts
+  has_many :assembly_parts, dependent: :destroy
+  has_many :parts, through: :assembly_parts
 end

@@ -21,7 +21,8 @@ class AssembliesController < ApplicationController
 
   # POST /assemblies or /assemblies.json
   def create
-    @assembly = Assembly.new(assembly_params)
+    @assembly = Assembly.new(assembly_params.except(:parts))
+    create_or_delete_assemblies_parts(@assembly, params[:assembly][:parts])
 
     respond_to do |format|
       if @assembly.save
@@ -36,8 +37,10 @@ class AssembliesController < ApplicationController
 
   # PATCH/PUT /assemblies/1 or /assemblies/1.json
   def update
+    create_or_delete_assemblies_parts(@assembly, params[:assembly][:parts])
+
     respond_to do |format|
-      if @assembly.update(assembly_params)
+      if @assembly.update(assembly_params.except(:parts))
         format.html { redirect_to assembly_url(@assembly), notice: "Assembly was successfully updated." }
         format.json { render :show, status: :ok, location: @assembly }
       else
@@ -59,12 +62,17 @@ class AssembliesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def create_or_delete_assemblies_parts(assembly, parts)
+      parts.each do |part|
+        assembly.parts << Part.find_or_create_by(id: part)
+      end
+    end
     def set_assembly
       @assembly = Assembly.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def assembly_params
-      params.require(:assembly).permit(:name)
+      params.require(:assembly).permit(:name, :parts)
     end
 end

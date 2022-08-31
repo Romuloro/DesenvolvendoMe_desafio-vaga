@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :assembly_parts
   resources :assemblies
   resources :parts
   resources :accounts

@@ -1,0 +1,29 @@
+<%= form_with(model: assembly) do |form| %>
+  <% if assembly.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(assembly.errors.count, "error") %> prohibited this assembly from being saved:</h2>
+
+      <ul>
+        <% assembly.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :part, style: "display: block" %>
+    <div style = "display:flex; flex-direction: column">
+      <%= collection_check_boxes(:assembly, :parts, Part.all, :id, :name, include_hidden: false ) %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

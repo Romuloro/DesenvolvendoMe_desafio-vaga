@@ -17,115 +17,147 @@ RSpec.describe "/assemblies", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Assembly. As you add validations to Assembly, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let!(:assembly) {create(:assembly)}
+  let!(:assembly_attributes) {attributes_for(:assembly)}
 
   describe "GET /index" do
-    it "renders a successful response" do
-      Assembly.create! valid_attributes
-      get assemblies_url
-      expect(response).to be_successful
+    context "when the part exists"  do
+      before do
+        get "/assemblies/"
+      end
+
+      it "renders a successful response" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "renders assembly name" do
+        expect(response.body).to include(assembly.name)
+      end
+
+      it "renders part name" do
+        expect(response.body).to include(assembly.parts[0].name)
+      end
     end
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      assembly = Assembly.create! valid_attributes
-      get assembly_url(assembly)
-      expect(response).to be_successful
+    context "when the account exists"  do
+      before do
+        get "/assemblies/", params: {id:assembly.id}
+      end
+
+      it "renders a successful response" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "renders assembly name" do
+        expect(response.body).to include(assembly.name)
+      end
+
+      it "renders part name" do
+        expect(response.body).to include(assembly.parts[0].name)
+      end
+    end
+
+    context "when the assembly doesn't exists" do
+      let!(:assembly_error) {build(:assembly)}
+      before do
+        get "/assemblies/", params: {id:assembly_error.id}
+      end
+
+      it "not renders account number" do
+        expect(response.body).to_not include(assembly_error.name)
+      end
     end
   end
 
   describe "GET /new" do
     it "renders a successful response" do
-      get new_assembly_url
+      get "/assemblies/new"
       expect(response).to be_successful
     end
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      assembly = Assembly.create! valid_attributes
-      get edit_assembly_url(assembly)
-      expect(response).to be_successful
+    context "when the assembly exists"  do
+      before do
+        get "/assemblies/#{assembly.id}/edit"
+      end
+
+      it "renders a successful response" do
+        expect(response).to be_successful
+      end
+
+      it "renders assembly name" do
+        expect(response.body).to include(assembly.name)
+      end
+
+      it "renders part name" do
+        expect(response.body).to include(assembly.parts[0].name)
+      end
     end
   end
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new Assembly" do
-        expect {
-          post assemblies_url, params: { assembly: valid_attributes }
-        }.to change(Assembly, :count).by(1)
+      before do
+        assembly_ = build(:assembly)
+        post "/assemblies/", params: { assembly: { name: assembly_.name, parts: [assembly_.parts[0].id, assembly_.parts[1].id] } }
       end
 
-      it "redirects to the created assembly" do
-        post assemblies_url, params: { assembly: valid_attributes }
-        expect(response).to redirect_to(assembly_url(Assembly.last))
-      end
-    end
-
-    context "with invalid parameters" do
-      it "does not create a new Assembly" do
-        expect {
-          post assemblies_url, params: { assembly: invalid_attributes }
-        }.to change(Assembly, :count).by(0)
+      it "creates a new assembly" do
+        puts response.body
+        expect(response).to have_http_status(:redirect)
       end
 
-      it "renders a successful response (i.e. to display the 'new' template)" do
-        post assemblies_url, params: { assembly: invalid_attributes }
-        expect(response).to be_successful
+      it "redirects to the created assemblies" do
+        get "/assemblies", params: { id: assembly.id }
+        expect(response.body).to include("Assembly was successfully created.")
       end
     end
   end
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested assembly" do
-        assembly = Assembly.create! valid_attributes
-        patch assembly_url(assembly), params: { assembly: new_attributes }
-        assembly.reload
-        skip("Add assertions for updated state")
+      before do
+        patch "/assemblies/#{assembly.id}", params: { assembly: { name: assembly.name, parts: [assembly.parts[0].id, assembly.parts[1].id] } }
       end
 
-      it "redirects to the assembly" do
-        assembly = Assembly.create! valid_attributes
-        patch assembly_url(assembly), params: { assembly: new_attributes }
-        assembly.reload
-        expect(response).to redirect_to(assembly_url(assembly))
+      it "redirects to the book" do
+        expect(response).to have_http_status(:redirect)
       end
-    end
 
-    context "with invalid parameters" do
-      it "renders a successful response (i.e. to display the 'edit' template)" do
-        assembly = Assembly.create! valid_attributes
-        patch assembly_url(assembly), params: { assembly: invalid_attributes }
-        expect(response).to be_successful
+      it "redirects to the update assembly" do
+        get "/assemblies", params: { id: assembly.id }
+        expect(response.body).to include("Assembly was successfully updated.")
+      end
+
+      it "renders assembly name" do
+        get "/assemblies", params: { id: assembly.id }
+        expect(response.body).to include(assembly.name)
+      end
+
+      it "renders part name" do
+        get "/assemblies", params: { id: assembly.id }
+        expect(response.body).to include(assembly.parts[0].name)
       end
     end
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested assembly" do
-      assembly = Assembly.create! valid_attributes
-      expect {
-        delete assembly_url(assembly)
-      }.to change(Assembly, :count).by(-1)
-    end
+    context "with valid parameters" do
+      before do
+        delete "/assemblies/#{assembly.id}"
+      end
 
-    it "redirects to the assemblies list" do
-      assembly = Assembly.create! valid_attributes
-      delete assembly_url(assembly)
-      expect(response).to redirect_to(assemblies_url)
+      it "destroys the requested parts" do
+        expect(response).to have_http_status(:redirect)
+      end
+
+      it "redirects to the delete author" do
+        get "/assemblies", params: { id: assembly.id }
+        expect(response.body).to include("Assembly was successfully destroyed.")
+      end
     end
   end
 end

@@ -17,6 +17,11 @@
   </div>
 
   <div>
+    <%= form.label :book, style: "display: block" %>
+    <%= select(:assembly, :book_id  , Book.all.collect { |p| [ p.titulo, p.id ] }, { include_blank: true })%>
+  </div>
+
+  <div>
     <%= form.label :part, style: "display: block" %>
     <div style = "display:flex; flex-direction: column">
       <%= collection_check_boxes(:assembly, :parts, Part.all, :id, :name, include_hidden: false ) %>

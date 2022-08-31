@@ -1,0 +1,21 @@
+<div id="<%= dom_id assembly %>">
+  <p>
+    <strong>Name:</strong>
+    <%= assembly.name %>
+  </p>
+
+  <p>
+    <strong>Book:</strong>
+    <%= assembly.book.titulo %>
+  </p>
+
+  <div style = "display:flex; flex-direction: column">
+    <strong>Parts:</strong>
+    <% assembly.parts.each do |part| %>
+      <%= link_to part, style:"text-decoration:none" do %>
+        <p> <%= part.name %></p>
+      <% end %>
+    <% end %>
+  </div>
+
+</div>

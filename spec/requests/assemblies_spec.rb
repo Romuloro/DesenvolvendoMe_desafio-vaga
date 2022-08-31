@@ -36,6 +36,10 @@ RSpec.describe "/assemblies", type: :request do
 
       it "renders part name" do
         expect(response.body).to include(assembly.parts[0].name)
+        end
+
+      it "renders book titulo" do
+        expect(response.body).to include(assembly.book.titulo)
       end
     end
   end
@@ -56,6 +60,10 @@ RSpec.describe "/assemblies", type: :request do
 
       it "renders part name" do
         expect(response.body).to include(assembly.parts[0].name)
+      end
+
+      it "renders book titulo" do
+        expect(response.body).to include(assembly.book.titulo)
       end
     end
 
@@ -95,6 +103,10 @@ RSpec.describe "/assemblies", type: :request do
       it "renders part name" do
         expect(response.body).to include(assembly.parts[0].name)
       end
+
+      it "renders book titulo" do
+        expect(response.body).to include(assembly.book.titulo)
+      end
     end
   end
 
@@ -102,11 +114,10 @@ RSpec.describe "/assemblies", type: :request do
     context "with valid parameters" do
       before do
         assembly_ = build(:assembly)
-        post "/assemblies/", params: { assembly: { name: assembly_.name, parts: [assembly_.parts[0].id, assembly_.parts[1].id] } }
+        post "/assemblies/", params: { assembly: { name: assembly_.name, parts: [assembly_.parts[0].id, assembly_.parts[1].id], book_id: assembly.book.id } }
       end
 
       it "creates a new assembly" do
-        puts response.body
         expect(response).to have_http_status(:redirect)
       end
 
@@ -120,7 +131,7 @@ RSpec.describe "/assemblies", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       before do
-        patch "/assemblies/#{assembly.id}", params: { assembly: { name: assembly.name, parts: [assembly.parts[0].id, assembly.parts[1].id] } }
+        patch "/assemblies/#{assembly.id}", params: { assembly: { name: assembly.name, parts: [assembly.parts[0].id, assembly.parts[1].id], book_id: assembly.book.id } }
       end
 
       it "redirects to the book" do
@@ -140,6 +151,11 @@ RSpec.describe "/assemblies", type: :request do
       it "renders part name" do
         get "/assemblies", params: { id: assembly.id }
         expect(response.body).to include(assembly.parts[0].name)
+      end
+
+      it "renders book titulo" do
+        get "/assemblies", params: { id: assembly.id }
+        expect(response.body).to include(assembly.book.titulo)
       end
     end
   end

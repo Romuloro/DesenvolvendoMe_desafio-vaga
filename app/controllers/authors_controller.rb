@@ -54,7 +54,7 @@ class AuthorsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to authors_url, notice: "Author was successfully destroyed." }
-      format.json { head :no_content }
+      format.json {render json: {message: "Author #{@author.name} was successfully destroyed."}, status: :ok}
     end
   end
 

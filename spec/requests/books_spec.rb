@@ -131,7 +131,6 @@ RSpec.describe "/books", type: :request do
       end
 
       it "creates a new Book" do
-        p book
         expect(response).to have_http_status(:created)
       end
 

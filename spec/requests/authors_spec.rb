@@ -101,6 +101,20 @@ RSpec.describe "/authors", type: :request do
         expect(response.body).to include("Author was successfully created.")
       end
     end
+
+    context "with valid parameters in API" do
+      before do
+        post "/authors.json", params: { author: author_attributes }
+      end
+
+      it "creates a new Author" do
+        expect(response).to have_http_status(:created)
+      end
+
+      it "the created author message" do
+        expect(response.body).to include("Author #{author_attributes[:name]} was successfully created.")
+      end
+    end
   end
 
   describe "PATCH /update" do
@@ -123,6 +137,20 @@ RSpec.describe "/authors", type: :request do
         expect(response.body).to include(author.reload.name.to_s)
       end
     end
+
+    context "with valid parameters in API" do
+      before do
+        put "/authors/#{author.id}.json", params: { author: author_attributes }
+      end
+
+      it "redirects to the author" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "redirects to the update author" do
+        expect(response.body).to include("Author #{author_attributes[:name]} was successfully updated.")
+      end
+    end
   end
 
   describe "DELETE /destroy" do
@@ -138,6 +166,20 @@ RSpec.describe "/authors", type: :request do
       it "redirects to the delete author" do
         get "/authors", params: { id: author.id }
         expect(response.body).to include("Author was successfully destroyed.")
+      end
+    end
+
+    context "with valid parameters in API" do
+      before do
+        delete "/authors/#{author.id}.json"
+      end
+
+      it "destroys the requested author" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "redirects to the delete author" do
+        expect(response.body).to include("Author #{author.name} was successfully destroyed.")
       end
     end
   end

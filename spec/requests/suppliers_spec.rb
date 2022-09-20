@@ -58,7 +58,6 @@ RSpec.describe "/suppliers", type: :request do
       end
 
       it "not renders supplier name" do
-        puts response.body
         expect(response.body).to_not include(supplier_error.name)
         #expect(response).to have_http_status(:success)
       end
@@ -104,6 +103,20 @@ RSpec.describe "/suppliers", type: :request do
         expect(response.body).to include("Supplier was successfully created.")
       end
     end
+
+    context "with valid parameters in API" do
+      before do
+        post "/suppliers.json", params: { supplier: supplier_attributes }
+      end
+
+      it "creates a new Author" do
+        expect(response).to have_http_status(:created)
+      end
+
+      it "the created author message" do
+        expect(response.body).to include("Supplier #{supplier_attributes[:name]} was successfully created.")
+      end
+    end
   end
 
   describe "PATCH /update" do
@@ -126,6 +139,20 @@ RSpec.describe "/suppliers", type: :request do
         expect(response.body).to include(supplier.reload.name.to_s)
       end
     end
+
+    context "with valid parameters in API" do
+      before do
+        put "/suppliers/#{supplier.id}.json", params: { supplier: supplier_attributes }
+      end
+
+      it "redirects to the author" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "redirects to the update author" do
+        expect(response.body).to include("Supplier #{supplier_attributes[:name]} was successfully updated.")
+      end
+    end
   end
 
   describe "DELETE /destroy" do
@@ -142,6 +169,20 @@ RSpec.describe "/suppliers", type: :request do
         get "/suppliers", params: { id: supplier.id }
         expect(response.body).to include("Supplier was successfully destroyed.")
       end
+    end
+  end
+
+  context "with valid parameters in API" do
+    before do
+      delete "/suppliers/#{supplier.id}.json"
+    end
+
+    it "destroys the requested author" do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "redirects to the delete author" do
+      expect(response.body).to include("Supplier #{supplier.name} was successfully destroyed.")
     end
   end
 end

@@ -111,9 +111,9 @@ RSpec.describe "/assemblies", type: :request do
   end
 
   describe "POST /create" do
+    let!(:assembly_) {build(:assembly)}
     context "with valid parameters" do
       before do
-        assembly_ = build(:assembly)
         post "/assemblies/", params: { assembly: { name: assembly_.name, parts: [assembly_.parts[0].id, assembly_.parts[1].id], book_id: assembly.book.id } }
       end
 
@@ -124,6 +124,21 @@ RSpec.describe "/assemblies", type: :request do
       it "redirects to the created assemblies" do
         get "/assemblies", params: { id: assembly.id }
         expect(response.body).to include("Assembly was successfully created.")
+      end
+    end
+
+    context "with valid parameters in API" do
+
+      before do
+        post "/assemblies.json", params: { assembly: { name: assembly_.name, parts: [assembly_.parts[0].id, assembly_.parts[1].id], book_id: assembly.book.id } }
+      end
+
+      it "creates a new Author" do
+        expect(response).to have_http_status(:created)
+      end
+
+      it "the created author message" do
+        expect(response.body).to include("Assembly #{assembly_.name} was successfully created.")
       end
     end
   end
@@ -158,6 +173,21 @@ RSpec.describe "/assemblies", type: :request do
         expect(response.body).to include(assembly.book.titulo)
       end
     end
+
+    context "with valid parameters in API" do
+      before do
+        put "/assemblies/#{assembly.id}.json", params: { assembly: { name: assembly.name, parts: [assembly.parts[0].id, assembly.parts[1].id], book_id: assembly.book.id } }
+      end
+
+      it "redirects to the author" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "redirects to the update author" do
+        expect(response.body).to include("Assembly #{assembly.name} was successfully updated.")
+      end
+    end
+
   end
 
   describe "DELETE /destroy" do
@@ -173,6 +203,20 @@ RSpec.describe "/assemblies", type: :request do
       it "redirects to the delete author" do
         get "/assemblies", params: { id: assembly.id }
         expect(response.body).to include("Assembly was successfully destroyed.")
+      end
+    end
+
+    context "with valid parameters in API" do
+      before do
+        delete "/assemblies/#{assembly.id}.json"
+      end
+
+      it "destroys the requested author" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "redirects to the delete author" do
+        expect(response.body).to include("Assembly #{assembly.name} was successfully destroyed.")
       end
     end
   end

@@ -1,5 +1,6 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy ]
+  skip_before_action :verify_authenticity_token
 
   # GET /accounts or /accounts.json
   def index
@@ -26,7 +27,7 @@ class AccountsController < ApplicationController
     respond_to do |format|
       if @account.save
         format.html { redirect_to account_url(@account), notice: "Account was successfully created." }
-        format.json { render :show, status: :created, location: @account }
+        format.json { render json: {message: "Account #{@account.account_number} was successfully created."}, status: :created, location: @account }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @account.errors, status: :unprocessable_entity }
@@ -39,7 +40,7 @@ class AccountsController < ApplicationController
     respond_to do |format|
       if @account.update(account_params)
         format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
-        format.json { render :show, status: :ok, location: @account }
+        format.json { render json: {message: "Account #{@account.account_number} was successfully updated."}, status: :ok, location: @account }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @account.errors, status: :unprocessable_entity }
@@ -53,7 +54,7 @@ class AccountsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to accounts_url, notice: "Account was successfully destroyed." }
-      format.json { head :no_content }
+      format.json { render json: {message: "Account #{@account.account_number} was successfully destroyed."}, status: :ok}
     end
   end
 

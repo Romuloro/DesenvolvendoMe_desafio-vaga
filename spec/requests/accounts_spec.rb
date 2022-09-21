@@ -111,6 +111,20 @@ RSpec.describe "/accounts", type: :request do
         expect(response.body).to include("Account was successfully created.")
       end
     end
+
+    context "with valid parameters in API" do
+      before do
+        post "/accounts.json", params: { account: { account_number: account_attributes[:account_number], supplier_id: account.supplier.id } }
+      end
+
+      it "creates a new Book" do
+        expect(response).to have_http_status(:created)
+      end
+
+      it "the created author message" do
+        expect(response.body).to include("Account #{account_attributes[:account_number]} was successfully created.")
+      end
+    end
   end
 
   describe "PATCH /update" do
@@ -138,6 +152,20 @@ RSpec.describe "/accounts", type: :request do
         expect(response.body).to include(account.reload.supplier.name.to_s)
       end
     end
+
+    context "with valid parameters in API" do
+      before do
+        put "/accounts/#{account.id}.json", params: { account: account_attributes }
+      end
+
+      it "redirects to the author" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "redirects to the update author" do
+        expect(response.body).to include("Account #{account_attributes[:account_number]} was successfully updated.")
+      end
+    end
   end
 
   describe "DELETE /destroy" do
@@ -153,6 +181,20 @@ RSpec.describe "/accounts", type: :request do
       it "redirects to the delete author" do
         get "/accounts", params: { id: account.id }
         expect(response.body).to include("Account was successfully destroyed.")
+      end
+    end
+
+    context "with valid parameters in API" do
+      before do
+        delete "/accounts/#{account.id}.json"
+      end
+
+      it "destroys the requested author" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "redirects to the delete author" do
+        expect(response.body).to include("Account #{account.account_number} was successfully destroyed.")
       end
     end
   end

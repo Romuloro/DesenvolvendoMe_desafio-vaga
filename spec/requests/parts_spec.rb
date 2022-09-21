@@ -139,6 +139,21 @@ RSpec.describe "/parts", type: :request do
         expect(response.body).to include("Part was successfully created.")
       end
     end
+
+    context "with valid parameters in API" do
+      before do
+        part_ = build(:part)
+        post "/parts.json", params: { part: { part_number: part_.part_number, supplier_id: part.supplier.id, name: part.name, descricao: part.descricao } }
+      end
+
+      it "creates a new Book" do
+        expect(response).to have_http_status(:created)
+      end
+
+      it "the created author message" do
+        expect(response.body).to include("Part #{part.name} was successfully created.")
+      end
+    end
   end
 
   describe "PATCH /update" do
@@ -175,6 +190,20 @@ RSpec.describe "/parts", type: :request do
         expect(response.body).to include(part.reload.supplier.name.to_s)
       end
     end
+
+    context "with valid parameters in API" do
+      before do
+        put "/parts/#{part.id}.json", params: { part: part_attributes }
+      end
+
+      it "redirects to the author" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "redirects to the update author" do
+        expect(response.body).to include("Part #{part_attributes[:name]} was successfully updated.")
+      end
+    end
   end
 
   describe "DELETE /destroy" do
@@ -190,6 +219,20 @@ RSpec.describe "/parts", type: :request do
       it "redirects to the delete author" do
         get "/parts", params: { id: part.id }
         expect(response.body).to include("Part was successfully destroyed.")
+      end
+    end
+
+    context "with valid parameters in API" do
+      before do
+        delete "/parts/#{part.id}.json"
+      end
+
+      it "destroys the requested author" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "redirects to the delete author" do
+        expect(response.body).to include("Part #{part.name} was successfully destroyed.")
       end
     end
   end

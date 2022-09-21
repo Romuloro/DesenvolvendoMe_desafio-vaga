@@ -43,7 +43,6 @@
 |:------|
 | `400` |
 
-
       {
         "error": "bad input parameter" 
       }
@@ -77,7 +76,6 @@
 | Codes |
 |:------|
 | `400` |
-
 
         {
           "error": "bad input parameter" 
@@ -146,7 +144,6 @@
 | Codes |
 |:------|
 | `400` |
-
 
         {
           "error": "bad input parameter" 
@@ -347,7 +344,6 @@
 | Codes |
 |:------|
 | `400` |
-
 
         {
           "error": "bad input parameter" 

@@ -483,7 +483,7 @@
 
 #### Deletar uma conta
 ```http
-  DELETE /books/${id}
+  DELETE /accounts/${id}
 ```
 
 | Parâmetro | Tipo     | Descrição                                    |
@@ -584,6 +584,598 @@
             "supplier_id": 1,
             "created_at": "2016-08-29T09:12:33.001Z",
             "updated_at": "2016-08-29T09:12:33.001Z"
+         }
+       ]
+
+| Codes |
+|:------|
+| `400` |
+
+        {
+          "error": "bad input parameter" 
+        }
+
+
+
+### Accounts routes (/parts/)
+
+#### Retorna todas as partes
+
+```http
+   GET /parts or GET /parts.json
+```
+
+| Parâmetro       | Tipo | Descrição |
+|:----------------|:-----|:----------|
+| `No parameters` |      |           |
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+      [
+        {
+          "id": 1,
+          "descricao": "Folhas com a gramatura 5mm",
+          "name": "Folhas simples",
+          "part_number": "fisajhios564g56f6g5f4g5dfg54",
+          "supplier_id": 1,
+          "created_at": "2016-08-29T09:12:33.001Z",
+          "updated_at": "2016-08-29T09:12:33.001Z"
+        },
+        {
+          "id": 2,
+          "descricao": "Folhas com a gramatura 7.5mm",
+          "name": "Folhas de destaque",
+          "part_number": "fisajhios564g56f6g5f4g5dfg78",
+          "supplier_id": 3,
+          "created_at": "2016-08-29T09:12:33.001Z",
+          "updated_at": "2016-08-29T09:12:33.001Z"
+        }
+      ]
+
+| Codes |
+|:------|
+| `400` |
+
+
+      {
+        "error": "bad input parameter" 
+      }
+
+
+#### Retorna uma parte
+
+```http
+  GET /parts/${id} or GET /parts/${id}.json
+```
+
+| Parâmetro | Tipo     | Descrição                                    |
+|:----------|:---------|:---------------------------------------------|
+| `id`      | `string` | **Obrigatório**. O ID da parte que você quer |
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       [
+         {
+           "id": 1,
+           "descricao": "Folhas com a gramatura 5mm",
+           "name": "Folhas simples",
+           "part_number": "fisajhios564g56f6g5f4g5dfg54",
+           "supplier_id": 1,
+           "created_at": "2016-08-29T09:12:33.001Z",
+           "updated_at": "2016-08-29T09:12:33.001Z"
+         }
+       ]
+
+| Codes |
+|:------|
+| `400` |
+
+
+        {
+          "error": "bad input parameter" 
+        }
+
+#### Deletar uma conta
+```http
+  DELETE /parts/${id}
+```
+
+| Parâmetro | Tipo     | Descrição                                    |
+|:----------|:---------|:---------------------------------------------|
+| `id`      | `string` | **Obrigatório**. O ID da parte que você quer |
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       {
+         "message": "Parte deletada com sucesso" 
+       }
+
+| Codes |
+|:------|
+| `400` |
+
+        {
+          "error": "bad input parameter" 
+        }
+
+
+#### Criar uma parte
+
+```http
+  POST /parts or POST /parts.json
+```
+
+| Parâmetro       | Tipo | Descrição |
+|:----------------|:-----|:----------|
+| `No parameters` |      |           |
+
+- ###### Request Body
+
+        {
+          "descricao": "Capa Dura preto e branco para livros baratos",
+          "name": "Capa Dura preto e branco",
+          "part_number": "s5a4fd56as4da54f54fasd",
+          "supplier_id": 1
+        }
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       [
+          {
+             "id": 1,
+             "descricao": "Capa Dura preto e branco para livros baratos",
+             "name": "Capa Dura preto e branco",
+             "part_number": "s5a4fd56as4da54f54fasd",
+             "supplier_id": 1,
+             "created_at": "2016-08-29T09:12:33.001Z",
+             "updated_at": "2016-08-29T09:12:33.001Z"
+         }
+       ]
+
+| Codes |
+|:------|
+| `400` |
+
+
+        {
+          "error": "bad input parameter" 
+        }
+
+
+#### Atualizar uma parte
+
+```http
+  PUT /parts/${id} or PUT /parts/${id}.json
+```
+
+| Parâmetro | Tipo     | Descrição                                    |
+|:----------|:---------|:---------------------------------------------|
+| `id`      | `string` | **Obrigatório**. O ID da parte que você quer |
+
+
+- ###### Request Body
+
+        {
+          "descricao": "Capa Dura preto e branco para livros baratos",
+          "name": "Capa Dura preto e branco",
+          "part_number": "s5a4fd56as4da54f54fasd",
+          "supplier_id": 1
+        }
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       [
+          {
+            "id": 1,
+            "descricao": "Capa Dura preto e branco para livros baratos",
+            "name": "Capa Dura preto e branco",
+            "part_number": "s5a4fd56as4da54f54fasd",
+            "supplier_id": 1,
+            "created_at": "2016-08-29T09:12:33.001Z",
+            "updated_at": "2016-08-29T09:12:33.001Z"
+         }
+       ]
+
+| Codes |
+|:------|
+| `400` |
+
+        {
+          "error": "bad input parameter" 
+        }
+
+
+### Assembly routes (/assemblies/)
+
+#### Retorna todas as partes
+
+```http
+   GET /assemblies or GET /assemblies.json
+```
+
+| Parâmetro       | Tipo | Descrição |
+|:----------------|:-----|:----------|
+| `No parameters` |      |           |
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+      [
+        {
+          "id": 1,
+            "name": "Montagem do Manifesto Comunista",
+            "book_id": 1,
+            "created_at": "2016-08-29T09:12:33.001Z",
+            "updated_at": "2016-08-29T09:12:33.001Z"
+        },
+        {
+          "id": 2,
+            "name": "Montagem do Manifesto Comunista",
+            "book_id": 3,
+            "created_at": "2016-08-29T09:12:33.001Z",
+            "updated_at": "2016-08-29T09:12:33.001Z"
+        }
+      ]
+
+| Codes |
+|:------|
+| `400` |
+
+
+      {
+        "error": "bad input parameter" 
+      }
+
+
+#### Retorna uma montagem
+
+```http
+  GET /assemblies/${id} or GET /assemblies/${id}.json
+```
+
+| Parâmetro | Tipo     | Descrição                                       |
+|:----------|:---------|:------------------------------------------------|
+| `id`      | `string` | **Obrigatório**. O ID da montagem que você quer |
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       [
+         {
+            "id": 1,
+            "name": "Montagem do Manifesto Comunista",
+            "book_id": 1,
+            "created_at": "2016-08-29T09:12:33.001Z",
+            "updated_at": "2016-08-29T09:12:33.001Z"
+         }
+       ]
+
+| Codes |
+|:------|
+| `400` |
+
+
+        {
+          "error": "bad input parameter" 
+        }
+
+#### Deletar uma montagem
+```http
+  DELETE /assemblies/${id}
+```
+
+| Parâmetro | Tipo     | Descrição                                       |
+|:----------|:---------|:------------------------------------------------|
+| `id`      | `string` | **Obrigatório**. O ID da montagem que você quer |
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       {
+         "message": "Montagem deletada com sucesso" 
+       }
+
+| Codes |
+|:------|
+| `400` |
+
+        {
+          "error": "bad input parameter" 
+        }
+
+
+#### Criar uma montagem
+
+```http
+  POST /assemblies or POST /assemblies.json
+```
+
+| Parâmetro       | Tipo | Descrição |
+|:----------------|:-----|:----------|
+| `No parameters` |      |           |
+
+- ###### Request Body
+
+        {
+           "name": "Montagem do livro Contra-História do Liberalismo",
+           "book_id": 2
+        }
+
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       [
+          {
+             "id": 2,
+             "name": "Montagem do livro Contra-História do Liberalismo",
+             "book_id": 2
+             "created_at": "2016-08-29T09:12:33.001Z",
+             "updated_at": "2016-08-29T09:12:33.001Z"
+         }
+       ]
+
+| Codes |
+|:------|
+| `400` |
+
+
+        {
+          "error": "bad input parameter" 
+        }
+
+
+#### Atualizar uma Montagem
+
+```http
+  PUT /assemblies/${id} or PUT /assemblies/${id}.json
+```
+
+| Parâmetro | Tipo     | Descrição                                       |
+|:----------|:---------|:------------------------------------------------|
+| `id`      | `string` | **Obrigatório**. O ID da montagem que você quer |
+
+
+- ###### Request Body
+
+        {
+           "name": "Montagem do livro Contra-História do Liberalismo",
+           "book_id": 2
+        }
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       [
+          {
+             "id": 2,
+             "name": "Montagem do livro Contra-História do Liberalismo",
+             "book_id": 2
+             "created_at": "2016-08-29T09:12:33.001Z",
+             "updated_at": "2016-08-29T09:12:33.001Z"
+         }
+       ]
+
+| Codes |
+|:------|
+| `400` |
+
+        {
+          "error": "bad input parameter" 
+        }
+
+
+### Supplier routes (/suppliers/)
+
+#### Retorna todas os fornecedores
+
+```http
+   GET /suppliers or GET /suppliers.json
+```
+
+| Parâmetro       | Tipo | Descrição |
+|:----------------|:-----|:----------|
+| `No parameters` |      |           |
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+      [
+        {
+          "id": 1,
+          "name": "Boitempo",
+          "created_at": "2016-08-29T09:12:33.001Z",
+          "updated_at": "2016-08-29T09:12:33.001Z"
+        },
+        {
+          "id": 2,
+          "name": "Amazon",
+          "created_at": "2016-08-29T09:12:33.001Z",
+          "updated_at": "2016-08-29T09:12:33.001Z"
+        }
+      ]
+
+| Codes |
+|:------|
+| `400` |
+
+
+      {
+        "error": "bad input parameter" 
+      }
+
+
+#### Retorna um fornecedor
+
+```http
+  GET /suppliers/${id} or GET /suppliers/${id}.json
+```
+
+| Parâmetro | Tipo     | Descrição                                         |
+|:----------|:---------|:--------------------------------------------------|
+| `id`      | `string` | **Obrigatório**. O ID do fornecedor que você quer |
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       [
+         {
+            "id": 2,
+            "name": "Amazon",
+            "created_at": "2016-08-29T09:12:33.001Z",
+            "updated_at": "2016-08-29T09:12:33.001Z"
+         }
+       ]
+
+| Codes |
+|:------|
+| `400` |
+
+
+        {
+          "error": "bad input parameter" 
+        }
+
+#### Deletar um fornecedor
+```http
+  DELETE /suppliers/${id}
+```
+
+| Parâmetro | Tipo     | Descrição                                            |
+|:----------|:---------|:-----------------------------------------------------|
+| `id`      | `string` | **Obrigatório**. O ID de um fornecedor que você quer |
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       {
+         "message": "Fornecedor deletado com sucesso" 
+       }
+
+| Codes |
+|:------|
+| `400` |
+
+        {
+          "error": "bad input parameter" 
+        }
+
+
+#### Criar um Fornecedor
+
+```http
+  POST /suppliers or POST /suppliers.json
+```
+
+| Parâmetro       | Tipo | Descrição |
+|:----------------|:-----|:----------|
+| `No parameters` |      |           |
+
+- ###### Request Body
+
+        {
+           "name": "Amazon"
+        }
+
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       [
+          {
+             "id": 2,
+             "name": "Amazon",
+             "created_at": "2016-08-29T09:12:33.001Z",
+             "updated_at": "2016-08-29T09:12:33.001Z"
+         }
+       ]
+
+| Codes |
+|:------|
+| `400` |
+
+
+        {
+          "error": "bad input parameter" 
+        }
+
+
+#### Atualizar um Fornecedor
+
+```http
+  PUT /suppliers/${id} or PUT /suppliers/${id}.json
+```
+
+| Parâmetro | Tipo     | Descrição                                         |
+|:----------|:---------|:--------------------------------------------------|
+| `id`      | `string` | **Obrigatório**. O ID do fornecedor que você quer |
+
+
+- ###### Request Body
+
+        {
+           "name": "Boitempo"
+        }
+
+- ###### Responses
+
+| Codes |
+|:------|
+| `200` |
+
+       [
+          {
+             "id": 2,
+             "name": "Boitempo",
+             "created_at": "2016-08-29T09:12:33.001Z",
+             "updated_at": "2016-08-29T09:12:33.001Z"
          }
        ]
 
